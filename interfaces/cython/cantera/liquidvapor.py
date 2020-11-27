@@ -34,3 +34,7 @@ def CarbonDioxide():
 def Heptane():
     """Create a `PureFluid` object using the equation of state for heptane."""
     return PureFluid('liquidvapor.xml','heptane')
+
+def Helium4():
+    """Create a `PureFluid` object using the equation of state for helium4."""
+    return PureFluid('liquidvapor.xml','helium4')

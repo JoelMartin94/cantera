@@ -60,6 +60,13 @@ liquid_vapor(name = "hfc134a",
              substance_flag = 5,
              initial_state = state(temperature = 300.0,
                                    pressure = OneAtm))
+
+liquid_vapor(name = "helium4",
+             elements = " He ",
+             species = "He",
+             substance_flag = 9,
+             initial_state = state(temperature = 300.0,
+                                   pressure = OneAtm))
 #------------------------------------------------------------------
 
 # Note that these species definitions are used ONLY to set the
@@ -138,6 +145,17 @@ species(name = "C7H16",
         NASA( [ 1000.00,  6000.00], [  1.853547040E+01,   3.914204680E-02,
                 -1.380302680E-05,   2.224038740E-09,   -1.334525800E-13,
                 -3.195007830E+04,  -7.019028400E+01] ) ) )
+                
+species(name = "He",
+    atoms = " He:1 ",
+    thermo = (
+       NASA( [  200.00,  1000.00], [  2.500000000E+00,   0.000000000E+00, 
+                0.000000000E+00,   0.000000000E+00,   0.000000000E+00,
+               -7.453750000E+02,   9.287247240E-01] ),
+       NASA( [ 1000.00,  6000.00], [  2.500000000E+00,   0.000000000E+00, 
+                0.000000000E+00,   0.000000000E+00,   0.000000000E+00,
+               -7.453750000E+02,   9.287247240E-01] ) ) )
+
 
 # these thermo values result in h = 0, s = 0 for sat. liquid at 273.15 K.
 # This convention is not consistent with that followed elsewhere in Cantera,
