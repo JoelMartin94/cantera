@@ -14,6 +14,7 @@
 #include "Nitrogen.h"
 #include "Oxygen.h"
 #include "Water.h"
+#include "Helium4.h"
 
 namespace tpx
 {
@@ -36,6 +37,8 @@ Substance* newSubstance(const std::string& name)
         return new CarbonDioxide;
     } else if (lcname == "heptane") {
         return new Heptane;
+    } else if (lcname == "helium4") {
+        return new Helium4;
     } else {
         throw Cantera::CanteraError("tpx::newSubstance", "No Substance"
             " definition known for '{}'.", name);
@@ -60,6 +63,8 @@ Substance* GetSub(int isub)
         return new CarbonDioxide;
     } else if (isub == 8) {
         return new Heptane;
+    } else if (isub == 9) {
+        return new Helium4;
     } else {
         return 0;
     }
