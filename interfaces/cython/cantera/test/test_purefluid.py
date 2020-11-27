@@ -340,6 +340,35 @@ class CarbonDioxide(PureFluidTestCases, utilities.CanteraTest):
         utilities.CanteraTest.__init__(self, *args, **kwargs)
 
 
+class Helium4(PureFluidTestCases, utilities.CanteraTest):
+    states = [
+       
+        StateData('super', 40.0, 0.101325, v=0.8219, h=219.62, s=19.4650),
+        StateData('super', 40.0, 4.0, v=0.02288, h=219.93, s=11.6450),
+        StateData('super', 40.0, 100.0, v=0.00370, h=504.52, s=5.1517),
+
+        StateData('super', 70.0, 0.101325, v=1.438, h=375.63, s=22.3755),
+        StateData('super', 70.0, 4.0, v=0.03910, h=382.80, s=14.6897),
+        StateData('super', 70.0, 100.0, v=0.00427, h=653.87, s=7.9229),
+                
+        StateData('super', 300.0, 0.101325, v=6.153, h=1570.19, s=29.9343),
+        StateData('super', 300.0, 4.0, v=0.1588, h=1583.04, s=22.3032),
+        StateData('super', 300.0, 100.0, v=0.00890, h=1882.29, s=15.7180),
+
+        StateData('super', 1500.0, 0.101325, v=30.75, h=7801.84, s=38.2922),
+        StateData('super', 1500.0, 4.0, v=0.7810, h=7813.13, s=30.6592),
+        StateData('super', 1500.0, 100.0, v=0.03294, h=8072.99, s=24.0251)
+
+        ]
+
+    def __init__(self, *args, **kwargs):
+        refState = StateData('critical', 5.2014, 0.22746,
+                             rho=69.64, h=18.622, s=4.1124)
+        tols = Tolerances(2e-3, 2e-3, 2e-3)
+        PureFluidTestCases.__init__(self, 'helium4', refState, tols)
+        utilities.CanteraTest.__init__(self, *args, **kwargs)
+
+
 class Heptane(PureFluidTestCases, utilities.CanteraTest):
     states = [
         StateData('liquid', 300.0, 0.006637, v=0.001476, h=0.0, s=0.0, relax=True),  # sat
