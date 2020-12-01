@@ -257,6 +257,19 @@ double Helium4::sp()
     return sum + m_entropy_offset;
 }
 
+double Helium4::ldens()
+{
+    double xx=1-(T/Tc), sum=0;
+    if ((T < Tmn) || (T > Tc)) {
+        throw CanteraError("Helium4::ldens",
+                           "Temperature out of range. T = {}", T);
+    }
+    for (int i=1; i<=6; i++) {
+        sum+=D[i-1]*pow(xx,double(i-1)/3.0);
+    }
+    return sum;
+}
+
 double Helium4::Pp()
 {
     double Tinverse = pow(T,-1);
@@ -264,6 +277,48 @@ double Helium4::Pp()
     double egrho = exp(-Gamma*Rho*Rho);
     double P = Rho*R*T;
 
+    if (2.0 <= T && T<=Tc)
+    {
+    	if (Rho <= ldens())
+    	{
+        	//Region I
+    	}
+    	else
+    	{
+    		//Region II
+    	}
+    }
+    else if (Tc <= T && T <= 10.0)
+    {
+    	if (Rho <= Roc)
+    	{
+    		//Region I
+    	}
+    	else
+    	{
+        	//Region II
+    	}
+    }
+    else if (10 < T && T < 15.0)
+    {
+    	if (Rho <= Roc)
+    	{
+    		//Region I + Region III
+    	}
+    	else
+    	{
+        	//Region II + Region III
+    	}
+    }
+    else if (15.0 <= T)
+    {
+    	//Region III
+    }
+    else
+    {
+    	throw CanteraError("Helium4::Pp",
+    	    	                           "Invalid region for. T = {}", T, " Rho = {}", Rho);
+    }
     // when i=0 we are on second sum of equation (where rho^2)
     for (int i=0; i<=6; i++) {
         P += C(i,Tinverse, T2inverse)*H(i,egrho);
@@ -286,18 +341,6 @@ double Helium4::Psat()
     return P;
 }
 
-double Helium4::ldens()
-{
-    double xx=1-(T/Tc), sum=0;
-    if ((T < Tmn) || (T > Tc)) {
-        throw CanteraError("Helium4::ldens",
-                           "Temperature out of range. T = {}", T);
-    }
-    for (int i=1; i<=6; i++) {
-        sum+=D[i-1]*pow(xx,double(i-1)/3.0);
-    }
-    return sum;
-}
 
 // The following functions allow users to get the properties of Helium4
 // that are not dependent on the state
