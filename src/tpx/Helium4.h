@@ -94,7 +94,7 @@ private:
 	 	  C_{34}  			&=& \frac{A_{34}}{T^2}
 	 	\f}
      */
-    double C(int jm, double, double);
+    double C(int jm, double, double, const double*);
 
     /*! Derivative of C(i)
      	 \f{eqnarray*}{
@@ -113,7 +113,7 @@ private:
      	 	 C'_{34}		& = & - \frac{2 A_{34}}{T^{3}}
      	 \f}
      */
-    double Cprime(int i, double, double, double);
+    double Cprime(int i, double, double, double, const double*);
 
     /*!
      * I = integral from o-rho { 1/(rho^2) * H(i, rho) d rho }

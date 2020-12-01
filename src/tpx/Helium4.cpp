@@ -19,13 +19,17 @@ namespace tpx
 /*
  * Helium4 constants
  */
+
+
 static const double Tmn = 2.177; // [K] minimum temperature for which calculations are valid
 static const double Tmx = 1501.0; // [K] maximum temperature for which calculations are valid
 static const double Tc=5.2014; // [K] critical temperature
 static const double Roc=69.64; // [kg/m^3] critical density
 static const double To=2.177; // [K] reference Temperature
 static const double R=2077.22578699; // [] gas constant for CO2 J/kg/K
-static const double Gamma=3.12094145751E-5; // [??]
+static const double Gamma1 = 1.56047072875E-4;
+static const double Gamma2 = 3.12094145751E-5; // [??]
+static const double Gamma3 = 3.12094145751E-5; // [??]
 static const double u0=1.8712207E4; // [] internal energy at To
 static const double s0=1.0812833E4; // [] entropy at To
 static const double Tp=250; // [K] ??
@@ -33,7 +37,45 @@ static const double Pc=0.22746E6; // [Pa] critical pressure
 static const double M=4.0026; // [kg/kmol] molar density
 
 // array Ahel is used by the function named Pp
-static const double Ahel[]= {
+static const double Ahel1[]= {
+	-2.63717841606E-4,		//1
+	-5.79620044301E-2,		//2
+	6.04727743809,			//3
+	3.86500111589E1,		//4
+	-2.75796664744E2, 		//5
+	-4.96960774707E2,		//6
+	2.04341052964E3,		//7
+	-2.66595676810E3,		//8
+	1.07968703317E3,		//9
+	2.33740311250E-1,		//10
+	-5.14034417722,			//11
+	3.08419481342E1, 		//12
+	-1.67047385071E2, 		//13
+	5.24045883077E2, 		//14
+	-8.07915654647E2,		//15
+	6.31099960781E2,		//16
+	-2.45791511511E2,		//17
+	1.47668657398E-2,		//18
+	-2.53062442742E-1,		//19
+	7.33463898526E-1, 		//20
+	2.92163822280E-1,		//21
+	4.07953759561E-3,		//22
+	-3.73905300971E-2,		//23
+	1.36171997779E-1,		//24
+	-2.47415495892E-1,		//25
+	2.33727221372E-1,		//26
+	-9.44142746383E-2		//27
+	-3.72006192405E-6,		//28
+	1.59283523218E-5,		//29
+	7.75248537108,			//30
+	-4.13169817472E1,		//31
+	5.40743659299E1,		//32
+	5.34172600153E-4,		//33
+	-1.05413018834E-3,		//34
+	-8.82580260817E-4		//35
+};
+
+static const double Ahel2[]= {
 	-2.63717841606E-4,		//1
 	-5.79620044301E-2,		//2
 	6.04727743809,			//3
@@ -71,6 +113,47 @@ static const double Ahel[]= {
 	3.80683087199E-3		//35
 };
 
+static const double Ahel3[]= {
+	-2.63717841606E-4,		//1
+	-5.79620044301E-2,		//2
+	6.04727743809,			//3
+	3.86500111589E1,		//4
+	-2.75796664744E2, 		//5
+	-4.96960774707E2,		//6
+	2.04341052964E3,		//7
+	-2.66595676810E3,		//8
+	1.07968703317E3,		//9
+	-5.69281410539E-2,		//10
+	2.54082433493,			//11
+	-4.33612764494E1,		//12
+	2.32901880818E2,		//13
+	-6.88289870860E2,		//14
+	2.12493828516E3,		//15
+	-2.69258356337E3,		//16
+	1.42625846393E3,		//17
+	7.76178949940E-4,		//18
+	6.75967782095E-2,		//19
+	9.09992115812E-2,		//20
+	-3.81211874106E-1,		//21
+	-2.30068006523E-5,		//22
+	4.02950826349E-5,		//23
+	1.07511466109E-3,		//24
+	-4.93747339170E-3,		//25
+	1.11576934297E-2,		//26
+	-1.23679512941E-2,		//27
+	-3.64745210287E-7,		//28
+	1.02807881652E-5,		//29
+	8.98703364016,			//30
+	-2.28140026278E2,		//31
+	5.33588707469,			//32
+	1.06067862115E-4,		//33
+	-4.46441499497E-3,		//34
+	3.80683087199E-3		//35
+};
+
+const double *Ahel = Ahel1;
+double Gamma = Gamma1;
+
 // array F is used by the function named Psat
 static const double F[]= {
 	-3.9394635287, 		//1
@@ -99,7 +182,7 @@ static const double D[]= {
 // double G is used by the function sp
 static const double G = 3115.85;
 
-double Helium4::C(int j,double Tinverse, double T2inverse)
+double Helium4::C(int j,double Tinverse, double T2inverse, const double *Ahel)
 {
 	double sum=0.0;
 	int i;
@@ -107,42 +190,42 @@ double Helium4::C(int j,double Tinverse, double T2inverse)
     switch (j) {
     case 0:
     	for (i=0; i<=8; i++) {
-    	        sum += Ahel[i]*pow(T, 2.-0.5*double(i));
+    	        sum += *(Ahel + i)*pow(T, 2.-0.5*double(i));
     	    }
         return sum;
     case 1:
     	for (i=9; i<=16; i++) {
-    	        sum += Ahel[i]*pow(T, 5.5-0.5*double(i));
+    	        sum += *(Ahel + i)*pow(T, 5.5-0.5*double(i));
     	    }
         return sum;
     case 2:
     	for (i=17; i<=20; i++) {
-    	        sum += Ahel[i]*pow(T, 17.5-double(i));
+    	        sum += *(Ahel + i)*pow(T, 17.5-double(i));
     	    }
         return sum;
     case 3:
     	for (i=21; i<=26; i++) {
-    	        sum += Ahel[i]*pow(T, 5.75-0.25*double(i));
+    	        sum += *(Ahel + i)*pow(T, 5.75-0.25*double(i));
     	    }
         return sum;
     case 4:
-        return Ahel[27] +
-        	   Ahel[28]*Tinverse;
+        return *(Ahel + 27) +
+        	   *(Ahel + 28)*Tinverse;
     case 5:
-        return Ahel[29] +
-               Ahel[30] *Tinverse +
-               Ahel[31] *T2inverse;
+        return *(Ahel + 29) +
+        		*(Ahel + 30) *Tinverse +
+				*(Ahel + 31) *T2inverse;
     case 6:
-        return Ahel[32] +
-               Ahel[33] *Tinverse +
-               Ahel[34] *T2inverse;
+        return *(Ahel + 32) +
+        		*(Ahel + 33) *Tinverse +
+        				*(Ahel + 34) *T2inverse;
     default:
     	throw CanteraError("Helium4::C",
     	    	                           "Index out of range. j = {}", j);
     }
 }
 
-double Helium4::Cprime(int j, double T2inverse, double T3inverse, double T4inverse)
+double Helium4::Cprime(int j, double T2inverse, double T3inverse, double T4inverse, const double *Ahel)
 {
 	double sum = 0.0;
 	int i;
@@ -150,34 +233,34 @@ double Helium4::Cprime(int j, double T2inverse, double T3inverse, double T4inver
     switch (j) {
     case 0:
     	for (i=0; i<=8; i++) {
-    	        sum += Ahel[i]*(2.-0.5*double(i))*pow(T, 1.-0.5*double(i));
+    	        sum += *(Ahel + i)*(2.-0.5*double(i))*pow(T, 1.-0.5*double(i));
     	    }
         return sum;
     case 1:
     	for (i=9; i<=16; i++) {
-    	        sum += Ahel[i]*(5.5-0.5*double(i))*pow(T, 4.5-0.5*double(i));
+    	        sum += *(Ahel + i)*(5.5-0.5*double(i))*pow(T, 4.5-0.5*double(i));
     	    }
         return sum;
     case 2:
     	for (i=17; i<=20; i++) {
-    	        sum += Ahel[i]*(17.5-double(i))*pow(T, 16.5-double(i));
+    	        sum += *(Ahel + i)*(17.5-double(i))*pow(T, 16.5-double(i));
     	    }
         return sum;
     case 3:
     	for (i=21; i<=26; i++) {
-    	        sum += Ahel[i]*(5.75-0.25*double(i))*pow(T, 4.75-0.25*double(i));
+    	        sum += *(Ahel + i)*(5.75-0.25*double(i))*pow(T, 4.75-0.25*double(i));
     	    }
         return sum;
     case 4:
-        return -Ahel[28]*T2inverse;
+        return -*(Ahel + 28)*T2inverse;
     case 5:
         return
-            - Ahel[30] *T2inverse +
-            - 2.0* Ahel[31] *T3inverse;
+            - *(Ahel + 30) *T2inverse +
+            - 2.0* *(Ahel + 31) *T3inverse;
     case 6:
         return
-            - Ahel[33] *T2inverse +
-            - 2.0* Ahel[34] *T3inverse;
+            - *(Ahel + 33) *T2inverse +
+            - 2.0* *(Ahel + 34) *T3inverse;
     default:
     	throw CanteraError("Helium4::Cprime",
     	    	                           "Index out of range. j = {}", j);
@@ -235,7 +318,7 @@ double Helium4::up()
     int i;
     for (i=0; i<=6; i++) {
         sum += I(i,egrho, Gamma) *
-               (C(i, Tinverse, T2inverse) - T*Cprime(i,T2inverse, T3inverse, T4inverse));
+               (C(i, Tinverse, T2inverse, Ahel) - T*Cprime(i,T2inverse, T3inverse, T4inverse, Ahel));
     }
     sum += u0;
     return sum + m_energy_offset;
@@ -251,7 +334,7 @@ double Helium4::sp()
     double sum = 0.0;
     sum += G*log(T/To);
     for (int i=0; i<=6; i++) {
-        sum -= Cprime(i,T2inverse, T3inverse, T4inverse)*I(i,egrho,Gamma);
+        sum -= Cprime(i,T2inverse, T3inverse, T4inverse, Ahel)*I(i,egrho,Gamma);
     }
     sum += s0 - R*log(Rho);
     return sum + m_entropy_offset;
@@ -274,7 +357,6 @@ double Helium4::Pp()
 {
     double Tinverse = pow(T,-1);
     double T2inverse = pow(T, -2);
-    double egrho = exp(-Gamma*Rho*Rho);
     double P = Rho*R*T;
 
     if (2.0 <= T && T<=Tc)
@@ -282,10 +364,14 @@ double Helium4::Pp()
     	if (Rho <= ldens())
     	{
         	//Region I
+    		Ahel = Ahel1;
+    		Gamma = Gamma1;
     	}
     	else
     	{
     		//Region II
+    		Ahel = Ahel2;
+    		Gamma = Gamma2;
     	}
     }
     else if (Tc <= T && T <= 10.0)
@@ -293,14 +379,20 @@ double Helium4::Pp()
     	if (Rho <= Roc)
     	{
     		//Region I
+    		Ahel = Ahel1;
+    		Gamma = Gamma1;
     	}
     	else
     	{
         	//Region II
+    		Ahel = Ahel2;
+    		Gamma = Gamma2;
     	}
     }
     else if (10 < T && T < 15.0)
     {
+    	throw CanteraError("Helium4::Pp",
+    	    	    	                           "Region not implemented. T = {}", T, " Rho = {}", Rho);
     	if (Rho <= Roc)
     	{
     		//Region I + Region III
@@ -313,15 +405,21 @@ double Helium4::Pp()
     else if (15.0 <= T)
     {
     	//Region III
+    	Ahel = Ahel3;
+    	Gamma = Gamma3;
     }
     else
     {
     	throw CanteraError("Helium4::Pp",
     	    	                           "Invalid region for. T = {}", T, " Rho = {}", Rho);
     }
+
+    double egrho = exp(-Gamma*Rho*Rho);
+
+
     // when i=0 we are on second sum of equation (where rho^2)
     for (int i=0; i<=6; i++) {
-        P += C(i,Tinverse, T2inverse)*H(i,egrho);
+        P += C(i,Tinverse, T2inverse, Ahel)*H(i,egrho);
     }
     return P;
 }
