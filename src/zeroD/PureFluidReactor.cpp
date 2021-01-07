@@ -23,6 +23,7 @@ void PureFluidReactor::setThermoMgr(ThermoPhase& thermo)
     Reactor::setThermoMgr(thermo);
 }
 
+/*
 void PureFluidReactor::getState(double* y)
 {
     if (m_thermo == 0) {
@@ -54,6 +55,7 @@ void PureFluidReactor::initialize(doublereal t0)
     Reactor::initialize(t0);
     m_uk.resize(m_nsp, 0.0);
 }
+*/
 
 void PureFluidReactor::updateState(doublereal* y)
 {
@@ -73,6 +75,7 @@ void PureFluidReactor::updateState(doublereal* y)
     m_thermo->saveState(m_state);
 }
 
+/*
 void PureFluidReactor::evalEqs(doublereal time, doublereal* y,
                       doublereal* ydot, doublereal* params)
 {
@@ -164,6 +167,6 @@ std::string PureFluidReactor::componentName(size_t k) {
         return Reactor::componentName(k);
     }
 }
-
+*/
 
 }

@@ -26,12 +26,12 @@ public:
 
     virtual void setThermoMgr(ThermoPhase& thermo);
 
-    virtual void getState(doublereal* y);
+    //virtual void getState(doublereal* y);
 
-    virtual void initialize(doublereal t0 = 0.0);
+    //virtual void initialize(doublereal t0 = 0.0);
 
-    virtual void evalEqs(doublereal t, doublereal* y,
-                         doublereal* ydot, doublereal* params);
+    //virtual void evalEqs(doublereal t, doublereal* y,
+    //                     doublereal* ydot, doublereal* params);
 
     virtual void updateState(doublereal* y);
 
@@ -39,11 +39,11 @@ public:
     //! component named *nm*. Possible values for *nm* are "mass",
     //! "volume", "temperature", the name of a homogeneous phase species, or the
     //! name of a surface species.
-    virtual size_t componentIndex(const std::string& nm) const;
-    std::string componentName(size_t k);
+    //virtual size_t componentIndex(const std::string& nm) const;
+    //std::string componentName(size_t k);
 
-protected:
-    vector_fp m_uk; //!< Species molar internal energies
+//protected:
+    //vector_fp m_uk; //!< Species molar internal energies
 };
 
 }
