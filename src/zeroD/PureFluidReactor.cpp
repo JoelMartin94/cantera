@@ -4,8 +4,6 @@
 // at http://www.cantera.org/license.txt for license and copyright information.
 
 #include "cantera/zeroD/PureFluidReactor.h"
-#include "cantera/zeroD/FlowDevice.h"
-#include "cantera/zeroD/Wall.h"
 
 using namespace std;
 
