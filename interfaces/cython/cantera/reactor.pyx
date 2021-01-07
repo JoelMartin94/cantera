@@ -277,7 +277,7 @@ cdef class Reactor(ReactorBase):
         The number of state variables in the reactor.
         Equal to:
 
-        `Reactor` and `IdealGasReactor`: `n_species` + 3 (mass, volume,
+        `Reactor`, `IdealGasReactor` or `PureFluidReactor`: `n_species` + 3 (mass, volume,
         internal energy or temperature).
 
         `ConstPressureReactor` and `IdealGasConstPressureReactor`:
@@ -292,7 +292,7 @@ cdef class Reactor(ReactorBase):
 
         The order of the variables (i.e. rows) is:
 
-        `Reactor` or `IdealGasReactor`:
+        `Reactor`, `IdealGasReactor` or `PureFluidReactor`:
 
           - 0  - mass
           - 1  - volume
@@ -346,6 +346,9 @@ cdef class IdealGasConstPressureReactor(Reactor):
     """
     reactor_type = "IdealGasConstPressureReactor"
 
+cdef class PureFluidReactor(Reactor):
+    """ A homogeneous zero-dimensional reactor for pure fluids. """
+    reactor_type = "PureFluidReactor"
 
 cdef class FlowReactor(Reactor):
     """
@@ -985,7 +988,7 @@ cdef class ReactorNet:
         case the shape is *(0, n_sensitivity_params)*. The order of the
         variables (i.e., rows) is:
 
-        `Reactor` or `IdealGasReactor`:
+        `Reactor`, `IdealGasReactor` or `PureFluidReactor`:
 
         - 0  - mass
         - 1  - volume
@@ -1025,7 +1028,7 @@ cdef class ReactorNet:
         number of variables for each `Reactor` and `Wall` in the system.
         Equal to:
 
-        `Reactor` and `IdealGasReactor`: `n_species` + 3 (mass, volume,
+        `Reactor`, `IdealGasReactor` or `PureFluidReactor`: `n_species` + 3 (mass, volume,
         internal energy or temperature).
 
         `ConstPressureReactor` and `IdealGasConstPressureReactor`:

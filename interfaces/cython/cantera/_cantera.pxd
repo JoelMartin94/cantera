@@ -963,6 +963,9 @@ cdef class ConstPressureReactor(Reactor):
 cdef class IdealGasReactor(Reactor):
     pass
 
+cdef class PureFluidReactor(Reactor):
+    pass
+
 cdef class IdealGasConstPressureReactor(Reactor):
     pass
 

@@ -10,6 +10,7 @@
 #include "cantera/zeroD/ConstPressureReactor.h"
 #include "cantera/zeroD/IdealGasReactor.h"
 #include "cantera/zeroD/IdealGasConstPressureReactor.h"
+#include "cantera/zeroD/PureFluidReactor.h"
 
 using namespace std;
 namespace Cantera
@@ -26,6 +27,7 @@ ReactorFactory::ReactorFactory()
     reg("FlowReactor", []() { return new FlowReactor(); });
     reg("IdealGasReactor", []() { return new IdealGasReactor(); });
     reg("IdealGasConstPressureReactor", []() { return new IdealGasConstPressureReactor(); });
+    reg("PureFluidReactor", []() { return new PureFluidReactor(); });
 }
 
 ReactorBase* ReactorFactory::newReactor(const std::string& reactorType)
@@ -42,7 +44,8 @@ ReactorBase* ReactorFactory::newReactor(int ir)
         {ConstPressureReactorType, "ConstPressureReactor"},
         {FlowReactorType, "FlowReactor"},
         {IdealGasReactorType, "IdealGasReactor"},
-        {IdealGasConstPressureReactorType, "IdealGasConstPressureReactor"}
+        {IdealGasConstPressureReactorType, "IdealGasConstPressureReactor"},
+        {PureFluidReactorType, "PureFluidReactor"}
     };
 
     try {
