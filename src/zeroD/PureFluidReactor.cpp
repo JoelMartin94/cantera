@@ -31,7 +31,7 @@ void PureFluidReactor::updateState(doublereal* y)
 	m_thermo->setMassFractions_NoNorm(y+3);
 
 	if (m_energy) {
-		m_thermo->setState_UV(y[2], m_vol/m_mass);
+		m_thermo->setState_UV(y[2]/m_mass, m_vol/m_mass);
 	} else {
 		m_thermo->setDensity(m_mass/m_vol);
 	}
